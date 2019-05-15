@@ -1,0 +1,7 @@
+[user]
+	name = Alejandro Varona
+	email = avarona10@gmail.com
+	username = avarona
+
+[alias]
+  	co = checkout
