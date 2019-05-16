@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# Homebrew installations
-
 install_homebrew() {
   if test ! $(which brew)
   then
@@ -12,15 +10,17 @@ install_homebrew() {
   fi
 }
 
+# TODO: check if packages are installed
 install_packages() {
-  if test -f "brew/Brewfile"
+  if test -f "brew/brewfile.symlink"
   then
+    if test
     echo "Installing packages from brewfile..."
-    brew bundle --file="brew/Brewfile"
+    brew bundle --file="brew/brewfile.symlink"
   else
     echo "No brewfile found"
     echo "Creating one instead..."
-    brew bundle dump --file="brew/Brewfile"
+    brew bundle dump --file="brew/brewfile.symlink"
     echo "Brewfile created"
   fi
 }
