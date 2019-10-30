@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# https://rvm.io/rvm/install
+# https://rvm.io/rvm/security
+
 echo "
 |----------------------------------------------|
 |          Ruby Version Manager (RVM)          |
