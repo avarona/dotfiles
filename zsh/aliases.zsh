@@ -5,9 +5,24 @@
 #
 # Example aliases
 
+# ZSH
 alias zshconfig="nano ~/.zshrc"
-alias zshsource="source ~/.zshrc; cp ~/.zshrc ~/dotfiles/zsh/zshrc.symlink"
-alias brewup="brew update; brew upgrade; brew prune; brew cleanup; brew doctor"
+alias zshalias="nano ~/.zsh/aliases.zsh"
+alias zshexports="nano ~/.zsh/exports.zsh"
+alias zshsource="source ~/.zshrc"
+
+# Logging
 alias gtail="grc tail -f"
+
+# React
+alias cra="create-react-app"
+alias nc="new-component"
+
+# Git
 alias cut="git branch | grep -v "master" | xargs git branch -D"
-alias loadnvm=". /usr/local/opt/nvm/nvm.sh; nvm use --delete-prefix v10.11.0 --silent"
+
+# Homebrew
+alias brewup="brew update; brew upgrade; brew cask upgrade; brew cleanup; brew doctor"
+
+# Elixir
+alias emix="iex -S mix"
