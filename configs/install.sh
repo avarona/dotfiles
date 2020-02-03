@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 symlinks() {
+  echo "Adding config symlinks..."
   for file in configs/*.symlink
   do
     prefix=${file#*/}
@@ -13,7 +14,7 @@ symlinks() {
     then
       ln -sf $from_path $to_path
       echo >> $to_path
-      echo prefix "symlink added!"
+      echo prefix
     else
       echo "Symlink already created"
     fi
