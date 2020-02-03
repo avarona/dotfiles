@@ -5,6 +5,9 @@
 #
 # Example aliases
 
+# Access dotfiles repo
+alias dotfiles="nano ~/dotfiles"
+
 # ZSH
 alias zshconfig="nano ~/.zshrc"
 alias zshalias="nano ~/.zsh/aliases.zsh"
