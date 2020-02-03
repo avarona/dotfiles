@@ -64,4 +64,4 @@ symlinks() {
 }
 
 install_zsh
-# symlinks
+symlinks
