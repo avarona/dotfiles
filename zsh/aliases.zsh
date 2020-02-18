@@ -6,7 +6,7 @@
 # Example aliases
 
 # Access dotfiles repo
-alias dotfiles="nano ~/dotfiles"
+alias dotfiles="code ~/dotfiles"
 
 # ZSH
 alias zshconfig="nano ~/.zshrc"
@@ -29,3 +29,4 @@ alias brewup="brew update; brew upgrade; brew cask upgrade; brew cleanup; brew d
 
 # Elixir
 alias emix="iex -S mix"
+

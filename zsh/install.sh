@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 
 echo "
 |----------------------------------------------|
@@ -6,18 +6,43 @@ echo "
 |----------------------------------------------|
 "
 
-install_zsh() {
-  # check what shell
-  # check if installed
-  echo $shell
-  shell=which $SHELL
-  if [[ $shell = /bin/zsh ]]
+install_oh_my_zsh() {
+  if ! [[ -d ~/.oh-my-zsh ]]
   then
-    echo $SHELL
+    echo "Installing oh-my-zsh..."
+
+    curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | bash
+    
+    echo "oh-my-zsh installed!"
+  else
+    echo "oh-my-zsh already installed"
   fi
-  #   brew install zsh
-  # else
-  # done
+    # make zsh default shell
+    chsh -s /bin/zsh
+}
+
+install_powerline_font() {
+  if ! [[ -f ~/config/fontconfig/conf.d ]]
+  then
+    echo "Installing powerline fonts..."
+
+    git clone https://github.com/powerline/fonts.git ~/fonts
+
+    ~/fonts/install.sh
+
+    if ! [[ -d ~/.config ]]
+    then
+      mkdir ~/.config
+    fi
+    
+    # cp ~/fonts/fontconfig/50-enable-terminess-powerline.conf ~/.config/fontconfig/conf.d
+
+    rm -rf ~/fonts
+
+    echo "Fonts installed!"
+  else
+    echo "Fonts already installed"
+  fi
 }
 
 symlinks() {
@@ -28,40 +53,28 @@ symlinks() {
   fi
 
   # link *.zsh files in ~/.zsh
-  for file in zsh/*.zsh
+  for file in ~/dotfiles/zsh/*.zsh
   do
-    prefix=${file#*/}
+    from_path=$file
+    to_path=~/.zsh/$(basename $file .zsh)
 
-    from_path=$(pwd)/${file}
-    to_path=~/.zsh/$prefix
-
-    if [[ -L $to_path && -f $to_path ]]
+    if [[ -L $to_path ]]
     then
-      echo $file "already linked"
+      echo $to_path "already linked"
     else
       ln -sf $from_path $to_path
-      echo >> $to_path
+      echo $file linked!
     fi
   done
 
   # link .zshrc to ~
-  for file in zsh/*.symlink
-  do
-    prefix=${file#*/}
-    suffix=${prefix%*.symlink}
-
-    from_path=$(pwd)/${file}
-    to_path=~/.${suffix#*/}
-
-    if [[ -L $to_path && -f $to_path ]]
-    then
-      echo $file "already linked"
-    else
-      ln -sf $from_path $to_path
-      echo >> $to_path
-    fi
-  done
+  ln -sf ~/dotfiles/zsh/zshrc.symlink ~/.zshrc
+  echo ".zshrc linked!"
 }
 
-install_zsh
+# install ohmyzsh first to set zsh as default
+install_oh_my_zsh
+install_powerline_font
+
+# create .zsh directory and link .zshrc
 symlinks
