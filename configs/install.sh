@@ -1,25 +1,21 @@
 #!/usr/bin/env bash
 
 symlinks() {
-  echo "Adding config symlinks..."
-  for file in configs/*.symlink
+  echo "Linking config files..."
+  for file in ~/dotfiles/configs/*.symlink
   do
-    prefix=${file#*/}
-    suffix=${prefix%*.symlink}
+    basename=$(basename $file .symlink)
+    from_path=$file
+    to_path=~/.$basename
 
-    from_path=$(pwd)/${file}
-    to_path=~/.${suffix#*/}
-
-    if ! [[ -L $to_path && -f $to_path ]]
+    if [[ -L $to_path ]]
     then
-      ln -sf $from_path $to_path
-      echo >> $to_path
-      echo prefix
+      echo $to_path "alread linked"
     else
-      echo "Symlink already created"
+      ln -sf $from_path $to_path
+      echo .$basename linked!
     fi
   done
-  echo "Done"
 }
 
 symlinks
