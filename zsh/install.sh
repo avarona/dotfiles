@@ -55,15 +55,16 @@ symlinks() {
   # link *.zsh files in ~/.zsh
   for file in ~/dotfiles/zsh/*.zsh
   do
+    basename=$(basename $file .zsh)
     from_path=$file
-    to_path=~/.zsh/$(basename $file .zsh)
+    to_path=~/.zsh/$basename
 
     if [[ -L $to_path ]]
     then
       echo $to_path "already linked"
     else
       ln -sf $from_path $to_path
-      echo $file linked!
+      echo $basename linked!
     fi
   done
 
