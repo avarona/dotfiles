@@ -2,15 +2,17 @@
 
 file_permissions() {
   echo "Number of installs..."
-  for file in */install.sh
+  for file in $(find ~/dotfiles -name install.sh)
   do
     echo $file
     if ! [[ -x $file ]]
     then
       chmod +x $file
+      echo "Permissions granted!"
+    else
+      echo "Alreay have permissions"
     fi
   done
-  echo "Permissions granted!"
 }
 
 install_all() {
