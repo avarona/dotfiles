@@ -1,15 +1,12 @@
 # Command line scripts
 export PATH=$PATH:~/bin
 
-# NPM installed
-export PATH=/usr/local/share/npm/bin:$PATH
-
 # Homebrew installed
+export PATH="/usr/local/bin:$PATH"
 export PATH="/usr/local/sbin:$PATH"
 
-# ASDF installed through repo
-source $HOME/.asdf/asdf.sh
-source $HOME/.asdf/completions/asdf.bash
+# ASDF installed through homebrew
+. $(brew --prefix asdf)/asdf.sh
 
 # Android development
 export ANDROID_HOME=$HOME/Library/Android/sdk

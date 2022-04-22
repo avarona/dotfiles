@@ -79,13 +79,12 @@ DEFAULT_USER=$USER
 
 # all of our zsh files
 typeset -U config_files
-config_files=($HOME/.zsh/*.zsh)
+config_files=($HOME/.zsh/*)
 
 # load the path files
-for file in ${config_files#*.zsh[@]}
+for file in ${config_files[@]}
 do
   source $file
 done
 
 unset config_files
-

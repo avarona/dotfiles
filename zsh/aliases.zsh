@@ -10,8 +10,8 @@ alias dotfiles="code ~/dotfiles"
 
 # ZSH
 alias zshconfig="nano ~/.zshrc"
-alias zshalias="nano ~/.zsh/aliases.zsh"
-alias zshexports="nano ~/.zsh/exports.zsh"
+alias zshalias="nano ~/.zsh/aliases"
+alias zshexports="nano ~/.zsh/exports"
 alias zshsource="source ~/.zshrc"
 
 # Logging
@@ -30,3 +30,5 @@ alias brewup="brew update; brew upgrade; brew cask upgrade; brew cleanup; brew d
 # Elixir
 alias emix="iex -S mix"
 
+# Cube
+alias cube-docker="~/dotfiles/bin/cube-docker.sh $@"
