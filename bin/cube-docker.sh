@@ -26,6 +26,22 @@ auth_setup=false
 install_deps=false
 prune_docker=false
 
+# Print usage when passing -h, --help parameters
+showHelp() { 
+  echo -e """
+  Usage:
+  
+      ${YELLOW}./cube-docker [OPTS] <container_name(s)>${NC}
+
+      -k , --keys         Rotate AWS keys
+      -a , --auth         Setup the authentication package
+      -i , --install      Install dependencies outside of docker
+      -h , --help         Show usage of script
+  """;
+  exit 0;
+}
+
+# Handle optional parameters
 while getopts "kaiph-:" OPT; do
   if [ "$OPT" = "-" ]; then
     OPT="${OPTARG%%=*}"
@@ -36,26 +52,20 @@ while getopts "kaiph-:" OPT; do
     a|auth) auth_setup=true;;
     i|install) install_deps=true;;
     p|prune) prune_docker=true;;
-    h|help)
-        echo """
-          [--keys | -k] Rotate AWS keys
-          [--auth | -a] Setup the authentication package
-          [--install | -i] Install dependencies outside of docker
-        """
-      ;;
+    h|help) showHelp;;
     ??*) echo "Illegal option --$OPT"; exit 2;;
     ?) exit 2;;
   esac
 done
 
-# AWS keys
+# Rotate AWS keys
 if [ "$rotate_keys" == true ]; then
   echo -e "${YELLOW}Rotating aws keys...${NC}";
   cd ~;
   aws-rotate-key -y -d;
 fi
 
-# Authentication js-package
+# Setup Authentication js-package
 if [ "$auth_setup" == true ]; then
   echo -e "${YELLOW}Running auth setup...${NC}";
   cd ~/Cube/js-packages;
@@ -65,11 +75,13 @@ fi
 # Cube monorepo
 cd ~/Cube/add-ins-monorepo;
 
+# Install dependencies
 if [ "$install_deps" == true ]; then
   echo -e "${YELLOW}Installing dependencies...${NC}";
   npm install;
 fi
 
+# Prune Docker
 if [ "$prune_docker" == true ]; then
   echo -e "${YELLOW}Pruning docker...${NC}";
   docker kill $(docker ps -q); # Stop containers
@@ -77,6 +89,7 @@ if [ "$prune_docker" == true ]; then
   docker image prune -a -f; # Remove images
 fi
 
+# Build Docker image & container
 echo -e "${YELLOW}Rebuilding docker...${NC}";
 docker-compose build --build-arg NPM_AUTH_TOKEN=`aws codeartifact get-authorization-token --domain cube --domain-owner 947364778009 --query authorizationToken --output text` $@;
 docker-compose up -d $@;
