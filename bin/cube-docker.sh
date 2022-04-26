@@ -1,11 +1,13 @@
 #!/bin/bash
 
 # Notes
-# This script assumes the monorepo is cloned to folder "~/Cube" on your machine
+# 1. This script assumes the monorepo is cloned to folder "~/Cube" on your machine
+# 2. Make this script executable with "chmod u+x <path-to-script>"
+# 3. You might want to create an alias in your bashrc/zshrc
 
 # Requirements
-# Cube Addons is setup per the documentation: https://github.com/cube-planning/add-ins-monorepo/blob/master/readme.md
-# AWS key rotation: https://github.com/stefansundin/aws-rotate-key
+# 1. Setup the Cube Addons & clone to "~/Cube": https://github.com/cube-planning/add-ins-monorepo/blob/master/readme.md
+# 2. Install the AWS key rotation repo: https://github.com/stefansundin/aws-rotate-key
 
 # Manual
 # k | keys -> rotate aws keys
@@ -57,6 +59,7 @@ while getopts "kaiph-:" OPT; do
     ?) exit 2;;
   esac
 done
+shift $((OPTIND-1)) # Remove paramerter from $@
 
 # Rotate AWS keys
 if [ "$rotate_keys" == true ]; then
@@ -84,13 +87,22 @@ fi
 # Prune Docker
 if [ "$prune_docker" == true ]; then
   echo -e "${YELLOW}Pruning docker...${NC}";
-  docker kill $(docker ps -q); # Stop containers
-  docker rm $(docker ps -a -q); # Remove containers
-  docker image prune -a -f; # Remove images
+
+  container_ids=$(docker ps -a -q)
+  for id in $container_ids; do
+      echo "$id - container"
+      docker stop $id && docker rm -f $id;
+  done
+
+  image_ids=$(docker images -a -q)
+  for id in $image_ids; do
+      echo "$id - image"
+      docker image rm -f $id;
+  done
 fi
 
 # Build Docker image & container
-echo -e "${YELLOW}Rebuilding docker...${NC}";
+echo -e "${YELLOW}Rebuilding docker...${NC} $@";
 docker-compose build --build-arg NPM_AUTH_TOKEN=`aws codeartifact get-authorization-token --domain cube --domain-owner 947364778009 --query authorizationToken --output text` $@;
 docker-compose up -d $@;
 
